@@ -18,8 +18,10 @@ package foundation.icon.gradle.plugins.javaee;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.BasePlugin;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 
 public class SDKPlugin implements Plugin<Project> {
     @Override
@@ -29,9 +31,9 @@ public class SDKPlugin implements Plugin<Project> {
         }
         var convention = project.getConvention().getPlugin(JavaPluginConvention.class);
         var optJar = project.getTasks().create(OptimizedJar.getTaskName(), OptimizedJar.class);
-        optJar.setGroup("javaee-sdk");
-        optJar.setDescription("Create a optimized JAR for SCORE deployment");
+        optJar.setGroup(BasePlugin.BUILD_GROUP);
+        optJar.setDescription("Creates a optimized JAR that can be used for SCORE deployment.");
+        optJar.from(convention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
         optJar.dependsOn(project.getTasks().findByName(JavaPlugin.JAR_TASK_NAME));
-        //optJar.from(convention.getSourceSets().getByName("main").getOutput());
     }
 }
