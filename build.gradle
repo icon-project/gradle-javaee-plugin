@@ -13,14 +13,14 @@ java {
 }
 
 group = 'foundation.icon'
-version = '0.1.0'
+version = '0.2.0'
 
 gradlePlugin {
     automatedPublishing = false
     plugins {
         javaeeSdk {
             id = 'foundation.icon.javaee-sdk'
-            implementationClass = 'foundation.icon.gradle.javaee.SDKPlugin'
+            implementationClass = 'foundation.icon.gradle.plugins.javaee.SDKPlugin'
         }
     }
 }
