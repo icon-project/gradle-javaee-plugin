@@ -16,13 +16,20 @@
 
 package foundation.icon.gradle.plugins.javaee;
 
+import foundation.icon.ee.tooling.deploy.OptimizedJarBuilder;
+import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.jvm.tasks.Jar;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 public class OptimizedJar extends Jar {
+    private static final boolean DEBUG_MODE = false;
     private static final String TASK_NAME = "optimizedJar";
 
     private final Property<String> mainClassName;
@@ -43,13 +50,50 @@ public class OptimizedJar extends Jar {
 
     @Override
     protected void copy() {
-        getLogger().info("=== Hello: " + TASK_NAME + " ===");
         configureJarMainClass();
         super.copy();
-        getLogger().info("=== END: " + TASK_NAME + " ===");
+        runJarOptimizer();
     }
 
     private void configureJarMainClass() {
         getManifest().attributes(Collections.singletonMap("Main-Class", mainClassName.get()));
+    }
+
+    private void runJarOptimizer() {
+        var rawJar = getArchiveFile().get();
+        byte[] jarBytes = getJarBytes(rawJar);
+        OptimizedJarBuilder jarBuilder = new OptimizedJarBuilder(DEBUG_MODE, jarBytes)
+                .withUnreachableMethodRemover()
+                .withRenamer();
+        byte[] optimizedJar = jarBuilder.getOptimizedBytes();
+        String outputName = getJarFilename(rawJar.toString());
+        writeFile(outputName, optimizedJar);
+    }
+
+    private String getJarFilename(String input) {
+        int len = input.lastIndexOf(".jar") + 1;
+        String prefix = input.substring(0, len-1) + "-optimized";
+        if (OptimizedJar.DEBUG_MODE) {
+            return prefix + "-debug.jar";
+        } else {
+            return prefix + ".jar";
+        }
+    }
+
+    private byte[] getJarBytes(RegularFile rawJar) {
+        try {
+            return Files.readAllBytes(rawJar.getAsFile().toPath());
+        } catch (IOException e) {
+            throw new RuntimeException("JAR read error: " + e.getMessage());
+        }
+    }
+
+    private static void writeFile(String filePath, byte[] data) {
+        Path outFile = Paths.get(filePath);
+        try {
+            Files.write(outFile, data);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
