@@ -16,10 +16,16 @@
 
 package foundation.icon.gradle.plugins.javaee;
 
+import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.Property;
 import org.gradle.jvm.tasks.Jar;
+
+import java.util.Collections;
 
 public class OptimizedJar extends Jar {
     private static final String TASK_NAME = "optimizedJar";
+
+    private final Property<String> mainClassName;
 
     public static String getTaskName() {
         return TASK_NAME;
@@ -27,11 +33,23 @@ public class OptimizedJar extends Jar {
 
     public OptimizedJar() {
         super();
+        ObjectFactory objectFactory = getProject().getObjects();
+        mainClassName = objectFactory.property(String.class).convention("");
+    }
+
+    public void setMainClassName(String mainClassName) {
+        this.mainClassName.set(mainClassName);
     }
 
     @Override
     protected void copy() {
+        getLogger().info("=== Hello: " + TASK_NAME + " ===");
+        configureJarMainClass();
         super.copy();
-        getLogger().info("Hello " + TASK_NAME);
+        getLogger().info("=== END: " + TASK_NAME + " ===");
+    }
+
+    private void configureJarMainClass() {
+        getManifest().attributes(Collections.singletonMap("Main-Class", mainClassName.get()));
     }
 }
