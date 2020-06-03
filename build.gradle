@@ -5,6 +5,9 @@ plugins {
 
 repositories {
     jcenter()
+    maven {
+        url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
+    }
 }
 
 java {
@@ -14,7 +17,7 @@ java {
 
 def snapshotSuffix = rootProject.hasProperty('release') ? '' : '-SNAPSHOT'
 group = 'foundation.icon'
-version = '0.3.0' + snapshotSuffix
+version = '0.4.0' + snapshotSuffix
 
 gradlePlugin {
     automatedPublishing = false
@@ -46,19 +49,10 @@ publishing {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.msgpack:msgpack-core:0.8.17'
-    implementation 'org.ow2.asm:asm:7.0'
-    implementation 'org.ow2.asm:asm-commons:7.0'
-    implementation 'org.ow2.asm:asm-tree:7.0'
-    implementation 'org.ow2.asm:asm-util:7.0'
+    implementation 'foundation.icon:javaee-tooling:0.7.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-}
-
-jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
 test {
