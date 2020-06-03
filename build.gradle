@@ -12,8 +12,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+def snapshotSuffix = rootProject.hasProperty('release') ? '' : '-SNAPSHOT'
 group = 'foundation.icon'
-version = '0.3.0'
+version = '0.3.0' + snapshotSuffix
 
 gradlePlugin {
     automatedPublishing = false
@@ -32,8 +33,8 @@ publishing {
             def snapshotsUrl = "http://ci.arch.iconloop.com/nexus/repository/maven-snapshots"
             url = version.endsWith('SNAPSHOT') ? snapshotsUrl : releasesUrl
             credentials {
-                username = "$nexusUsername"
-                password = "$nexusPassword"
+                username = rootProject.hasProperty('nexusUsername') ? "$nexusUsername" : ''
+                password = rootProject.hasProperty('nexusPassword') ? "$nexusPassword" : ''
             }
         }
     }
