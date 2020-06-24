@@ -29,10 +29,10 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 public class OptimizedJar extends Jar {
-    private static final boolean DEBUG_MODE = false;
     private static final String TASK_NAME = "optimizedJar";
 
     private final Property<String> mainClassName;
+    private boolean debugMode;
 
     public static String getTaskName() {
         return TASK_NAME;
@@ -42,10 +42,15 @@ public class OptimizedJar extends Jar {
         super();
         ObjectFactory objectFactory = getProject().getObjects();
         mainClassName = objectFactory.property(String.class).convention("");
+        debugMode = false;
     }
 
     public void setMainClassName(String mainClassName) {
         this.mainClassName.set(mainClassName);
+    }
+
+    public void setEnableDebug(boolean enableDebug) {
+        debugMode = enableDebug;
     }
 
     @Override
@@ -62,7 +67,7 @@ public class OptimizedJar extends Jar {
     private void runJarOptimizer() {
         var rawJar = getArchiveFile().get();
         byte[] jarBytes = getJarBytes(rawJar);
-        OptimizedJarBuilder jarBuilder = new OptimizedJarBuilder(DEBUG_MODE, jarBytes)
+        OptimizedJarBuilder jarBuilder = new OptimizedJarBuilder(debugMode, jarBytes)
                 .withUnreachableMethodRemover()
                 .withRenamer();
         byte[] optimizedJar = jarBuilder.getOptimizedBytes();
@@ -71,12 +76,12 @@ public class OptimizedJar extends Jar {
     }
 
     private String getJarFilename(String input) {
-        int len = input.lastIndexOf(".jar") + 1;
-        String prefix = input.substring(0, len-1) + "-optimized";
-        if (OptimizedJar.DEBUG_MODE) {
+        int len = input.lastIndexOf(".jar");
+        String prefix = input.substring(0, len);
+        if (debugMode) {
             return prefix + "-debug.jar";
         } else {
-            return prefix + ".jar";
+            return prefix + "-optimized.jar";
         }
     }
 
