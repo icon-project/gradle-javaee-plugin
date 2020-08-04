@@ -20,6 +20,7 @@ import foundation.icon.ee.tooling.deploy.OptimizedJarBuilder;
 import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Input;
 import org.gradle.jvm.tasks.Jar;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class OptimizedJar extends Jar {
     private static final String TASK_NAME = "optimizedJar";
 
     private final Property<String> mainClassName;
+    private final Property<String> outputJarName;
     private boolean debugMode;
 
     public static String getTaskName() {
@@ -42,6 +44,9 @@ public class OptimizedJar extends Jar {
         super();
         ObjectFactory objectFactory = getProject().getObjects();
         mainClassName = objectFactory.property(String.class).convention("");
+        outputJarName = objectFactory.property(String.class);
+        outputJarName.convention(this.getProject().provider(
+                () -> getJarFilename(getArchiveFile().get().toString())));
         debugMode = false;
     }
 
@@ -51,6 +56,11 @@ public class OptimizedJar extends Jar {
 
     public void setEnableDebug(boolean enableDebug) {
         debugMode = enableDebug;
+    }
+
+    @Input
+    public String getOutputJarName() {
+        return this.outputJarName.getOrNull();
     }
 
     @Override
@@ -71,8 +81,7 @@ public class OptimizedJar extends Jar {
                 .withUnreachableMethodRemover()
                 .withRenamer();
         byte[] optimizedJar = jarBuilder.getOptimizedBytes();
-        String outputName = getJarFilename(rawJar.toString());
-        writeFile(outputName, optimizedJar);
+        writeFile(outputJarName.get(), optimizedJar);
     }
 
     private String getJarFilename(String input) {
