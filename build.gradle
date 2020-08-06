@@ -16,8 +16,8 @@ java {
 }
 
 def snapshotSuffix = rootProject.hasProperty('release') ? '' : '-SNAPSHOT'
-group = 'foundation.icon'
-version = '0.6.4' + snapshotSuffix
+group = GROUP
+version = VERSION + snapshotSuffix
 
 gradlePlugin {
     automatedPublishing = false
