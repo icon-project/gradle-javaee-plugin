@@ -22,9 +22,9 @@ version = VERSION + snapshotSuffix
 gradlePlugin {
     automatedPublishing = false
     plugins {
-        javaeeSdk {
-            id = 'foundation.icon.javaee-sdk'
-            implementationClass = 'foundation.icon.gradle.plugins.javaee.SDKPlugin'
+        javaeePlugin {
+            id = 'foundation.icon.javaee'
+            implementationClass = 'foundation.icon.gradle.plugins.javaee.JavaeePlugin'
         }
     }
 }

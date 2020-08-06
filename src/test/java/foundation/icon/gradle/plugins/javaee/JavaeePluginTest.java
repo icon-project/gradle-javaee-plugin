@@ -19,13 +19,14 @@ package foundation.icon.gradle.plugins.javaee;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class SDKPluginTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class JavaeePluginTest {
     @Test public void pluginRegistersATask() {
         // Create a test project and apply the plugin
         Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("foundation.icon.javaee-sdk");
+        project.getPlugins().apply("foundation.icon.javaee");
 
         // Verify the result
         assertNotNull(project.getTasks().findByName(OptimizedJar.getTaskName()));

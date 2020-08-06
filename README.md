@@ -14,7 +14,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.6.4'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.0'
     }
 }
 
@@ -26,7 +26,7 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'foundation.icon.javaee-sdk'
+apply plugin: 'foundation.icon.javaee'
 ```
 
 **[Note]** As of now, `gradle-javaee-plugin` can only be retrieved through the local Nexus repository.
