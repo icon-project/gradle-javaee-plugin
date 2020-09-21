@@ -14,7 +14,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.7.0'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.1'
     }
 }
 
