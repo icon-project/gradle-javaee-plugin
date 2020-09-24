@@ -1,6 +1,7 @@
 plugins {
     id 'java-gradle-plugin'
     id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.5'
 }
 
 repositories {
@@ -26,6 +27,48 @@ gradlePlugin {
     }
 }
 
+dependencies {
+    implementation 'foundation.icon:javaee-tooling:0.8.5'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+def repoUrl = 'https://github.com/icon-project/gradle-javaee-plugin'
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "iconfoundation"
+            name "icon.foundation"
+            email "foo@icon.foundation"
+        }
+    }
+    scm {
+        url repoUrl
+    }
+}
+
 publishing {
     repositories {
         maven {
@@ -41,17 +84,35 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', project.name)
+                root.appendNode('description', 'Gradle plugin for ICON JavaEE')
+                root.appendNode('url', repoUrl)
+                root.children().last() + pomConfig
+            }
         }
     }
 }
 
-dependencies {
-    implementation 'foundation.icon:javaee-tooling:0.8.5'
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
-}
-
-test {
-    useJUnitPlatform()
+bintray {
+    user = rootProject.hasProperty('bintrayUser') ? "$bintrayUser" : ''
+    key = rootProject.hasProperty('bintrayKey') ? "$bintrayKey" : ''
+    publications = ['mavenJava']
+    publish = true
+    pkg {
+        userOrg = 'icon'
+        repo = 'javaee'
+        name = project.name
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/icon-project/gradle-javaee-plugin.git'
+        version {
+            name = project.version
+            gpg {
+                sign = true
+            }
+        }
+    }
 }
