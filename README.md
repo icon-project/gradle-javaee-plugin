@@ -1,4 +1,6 @@
-# Gradle plugin for JavaEE SDK
+[![Download](https://api.bintray.com/packages/icon/javaee/gradle-javaee-plugin/images/download.svg)](https://bintray.com/icon/javaee/gradle-javaee-plugin/_latestVersion)
+
+# Gradle plugin for Java Execution Environment
 
 `gradle-javaee-plugin` is a Gradle plugin to automate the process of generating the optimized jar bundle.
 The generated jar bundle can be used for deployment to ICON networks that support the Java SCORE execution environment (a.k.a. JavaEE).
@@ -9,9 +11,6 @@ The generated jar bundle can be used for deployment to ICON networks that suppor
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
-        }
     }
     dependencies {
         classpath 'foundation.icon:gradle-javaee-plugin:0.7.1'
@@ -20,17 +19,11 @@ buildscript {
 
 repositories {
     jcenter()
-    maven {
-        url "http://ci.arch.iconloop.com/nexus/repository/maven-public"
-    }
 }
 
 apply plugin: 'java'
 apply plugin: 'foundation.icon.javaee'
 ```
-
-**[Note]** As of now, `gradle-javaee-plugin` can only be retrieved through the local Nexus repository.
-The exact plan when it will be available to the public is not yet decided.
 
 ## Configuring Tasks
 
@@ -49,6 +42,6 @@ optimizedJar {
 }
 ```
 
-## Licenses
+## License
 
-This project follows the Apache 2.0 License. Please refer to [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for details.
+This project is available under the [Apache License, Version 2.0](LICENSE).
