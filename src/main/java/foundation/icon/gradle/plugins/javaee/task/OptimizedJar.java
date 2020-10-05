@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package foundation.icon.gradle.plugins.javaee;
+package foundation.icon.gradle.plugins.javaee.task;
 
 import foundation.icon.ee.tooling.deploy.OptimizedJarBuilder;
 import org.gradle.api.file.RegularFile;

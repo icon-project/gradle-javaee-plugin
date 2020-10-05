@@ -16,6 +16,7 @@
 
 package foundation.icon.gradle.plugins.javaee;
 
+import foundation.icon.gradle.plugins.javaee.task.OptimizedJar;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Test;

@@ -16,6 +16,7 @@
 
 package foundation.icon.gradle.plugins.javaee;
 
+import foundation.icon.gradle.plugins.javaee.task.OptimizedJar;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.BasePlugin;
