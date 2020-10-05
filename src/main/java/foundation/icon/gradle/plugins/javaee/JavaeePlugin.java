@@ -16,6 +16,7 @@
 
 package foundation.icon.gradle.plugins.javaee;
 
+import foundation.icon.gradle.plugins.javaee.ext.DeploymentExtension;
 import foundation.icon.gradle.plugins.javaee.task.OptimizedJar;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -36,5 +37,7 @@ public class JavaeePlugin implements Plugin<Project> {
         optJar.setDescription("Creates a optimized JAR that can be used for SCORE deployment.");
         optJar.from(convention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME).getOutput());
         optJar.dependsOn(project.getTasks().findByName(JavaPlugin.JAR_TASK_NAME));
+
+        project.getExtensions().create(DeploymentExtension.getExtName(), DeploymentExtension.class, project);
     }
 }
