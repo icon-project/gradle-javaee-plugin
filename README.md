@@ -11,9 +11,12 @@ The generated jar bundle can be used for deployment to ICON networks that suppor
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
+        }
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.7.1'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.2'
     }
 }
 
@@ -41,6 +44,32 @@ optimizedJar {
     mainClassName = 'com.iconloop.score.example.HelloWorld'
 }
 ```
+
+### Jar Deployment
+
+The `deployJar` extension can be used to deploy the optimized jar to local or remote ICON networks that support the Java SCORE execution environment.
+
+```groovy
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 3
+        }
+    }
+    keystore = './mykey.json'
+    password = 'keypass'
+    parameters {
+        arg('name', 'Alice')
+    }
+}
+```
+
+The above extension creates `deployToLocal` task automatically based on the container name of the given endpoints property.
+
+## Examples
+
+- [Java SCORE Examples](https://github.com/icon-project/java-score-examples)
 
 ## License
 
