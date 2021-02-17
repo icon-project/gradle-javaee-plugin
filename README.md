@@ -1,4 +1,4 @@
-[![Download](https://api.bintray.com/packages/icon/javaee/gradle-javaee-plugin/images/download.svg)](https://bintray.com/icon/javaee/gradle-javaee-plugin/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/foundation.icon/gradle-javaee-plugin/badge.svg)](https://search.maven.org/search?q=g:foundation.icon%20a:gradle-javaee-plugin)
 
 # Gradle plugin for Java Execution Environment
 
@@ -10,7 +10,7 @@ The generated jar bundle can be used for deployment to ICON networks that suppor
 ```groovy
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
@@ -21,7 +21,7 @@ buildscript {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 apply plugin: 'java'
