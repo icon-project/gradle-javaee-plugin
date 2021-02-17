@@ -1,11 +1,12 @@
 plugins {
     id 'java-gradle-plugin'
     id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.8.5'
+    id 'signing'
+    id 'io.codearte.nexus-staging' version '0.22.0'
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven {
         url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
     }
@@ -16,7 +17,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-def snapshotSuffix = rootProject.hasProperty('release') ? '' : '-SNAPSHOT'
+def snapshotSuffix = project.hasProperty('release') ? '' : '-SNAPSHOT'
 group = GROUP
 version = VERSION + snapshotSuffix
 
@@ -76,12 +77,13 @@ def pomConfig = {
 publishing {
     repositories {
         maven {
-            def releasesUrl = "http://ci.arch.iconloop.com/nexus/repository/maven-releases"
-            def snapshotsUrl = "http://ci.arch.iconloop.com/nexus/repository/maven-snapshots"
+            name = 'mavenCentral'
+            def releasesUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsUrl = "https://oss.sonatype.org/content/repositories/snapshots"
             url = version.endsWith('SNAPSHOT') ? snapshotsUrl : releasesUrl
             credentials {
-                username = rootProject.hasProperty('nexusUsername') ? "$nexusUsername" : ''
-                password = rootProject.hasProperty('nexusPassword') ? "$nexusPassword" : ''
+                username = project.hasProperty('mavenCentralUsername') ? "$mavenCentralUsername" : ''
+                password = project.hasProperty('mavenCentralPassword') ? "$mavenCentralPassword" : ''
             }
         }
     }
@@ -101,22 +103,13 @@ publishing {
     }
 }
 
-bintray {
-    user = rootProject.hasProperty('bintrayUser') ? "$bintrayUser" : ''
-    key = rootProject.hasProperty('bintrayKey') ? "$bintrayKey" : ''
-    publications = ['mavenJava']
-    publish = true
-    pkg {
-        userOrg = 'icon'
-        repo = 'javaee'
-        name = project.name
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/icon-project/gradle-javaee-plugin.git'
-        version {
-            name = project.version
-            gpg {
-                sign = true
-            }
-        }
-    }
+signing {
+    sign publishing.publications.mavenJava
+}
+
+nexusStaging {
+    packageGroup = GROUP
+    stagingProfileId = project.hasProperty('mavenProfileId') ? "$mavenProfileId" : ''
+    username = project.hasProperty('mavenCentralUsername') ? "$mavenCentralUsername" : ''
+    password = project.hasProperty('mavenCentralPassword') ? "$mavenCentralPassword" : ''
 }
