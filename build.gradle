@@ -32,7 +32,7 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation 'foundation.icon:javaee-tooling:0.8.7'
+    implementation 'foundation.icon:javaee-tooling:0.8.8'
     implementation 'foundation.icon:icon-sdk:2.0.0-SNAPSHOT'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
