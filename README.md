@@ -11,9 +11,6 @@ The generated jar bundle can be used for deployment to ICON networks that suppor
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-        }
     }
     dependencies {
         classpath 'foundation.icon:gradle-javaee-plugin:0.7.7'
