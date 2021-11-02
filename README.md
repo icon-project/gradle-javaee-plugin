@@ -13,7 +13,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'foundation.icon:gradle-javaee-plugin:0.7.8'
+        classpath 'foundation.icon:gradle-javaee-plugin:0.7.9'
     }
 }
 
@@ -51,7 +51,7 @@ deployJar {
     endpoints {
         local {
             uri = 'http://localhost:9082/api/v3'
-            nid = 3
+            nid = 0x3
         }
     }
     keystore = './mykey.json'
@@ -63,6 +63,24 @@ deployJar {
 ```
 
 The above extension creates `deployToLocal` task automatically based on the container name of the given endpoints property.
+
+#### Deployment for update
+
+Starting from version `0.7.9`, you can specify `to` address to update an already deployed contract.
+`to` property is optional, thus omitting this is regarded as deploying a new contract.
+
+```groovy
+deployJar {
+    endpoints {
+        local {
+            uri = 'http://localhost:9082/api/v3'
+            nid = 0x3
+            to = 'cxe3d5237f13530bce0b936df320c0308885d062e9'
+        }
+    }
+    ...
+}
+```
 
 ## Examples
 
