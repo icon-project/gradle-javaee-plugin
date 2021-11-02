@@ -50,6 +50,7 @@ public class DeploymentExtension {
             project.getTasks().register(taskName, DeployJar.class, task -> {
                 task.getUri().set(container.getUri());
                 task.getNid().set(container.getNid());
+                task.getTo().set(container.getTo());
             });
             var deployTask = project.getTasks().getByName(taskName);
             deployTask.setGroup("Deployment");

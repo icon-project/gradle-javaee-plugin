@@ -39,17 +39,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class DeployJar extends DefaultTask {
-    public static final Address ZERO_ADDRESS = new Address("cx0000000000000000000000000000000000000000");
+    public static final String SYSTEM_ADDRESS = "cx0000000000000000000000000000000000000000";
     public static final String CONTENT_TYPE_JAVA = "application/java";
 
     private final Property<String> uri;
     private final Property<Integer> nid;
+    private final Property<String> to;
 
     public DeployJar() {
         super();
         ObjectFactory objectFactory = getProject().getObjects();
         this.uri = objectFactory.property(String.class);
         this.nid = objectFactory.property(Integer.class);
+        this.to = objectFactory.property(String.class);
     }
 
     @Input
@@ -62,11 +64,17 @@ public class DeployJar extends DefaultTask {
         return nid;
     }
 
+    @Input
+    public Property<String> getTo() {
+        return to;
+    }
+
     @TaskAction
     public void deploy() throws Exception {
         var optJar = getProject().getTasks().getByName(OptimizedJar.getTaskName());
         var extension = (DeploymentExtension) getProject().getExtensions().getByName(DeploymentExtension.getExtName());
         var txHandler = new TransactionHandler(getUri().get());
+        var toAddress = new Address(getTo().get());
 
         String jarPath = "" + optJar.property("outputJarName");
         if (!jarPath.endsWith(".jar")) {
@@ -75,6 +83,9 @@ public class DeployJar extends DefaultTask {
         byte[] content = Files.readAllBytes(Path.of(jarPath));
 
         System.out.println(">>> deploy to " + getUri().get());
+        if (!SYSTEM_ADDRESS.equals(toAddress.toString())) {
+            System.out.println(">>> target address = " + getTo().get());
+        }
         System.out.println(">>> optimizedJar = " + jarPath);
         System.out.println(">>> keystore = " + extension.getKeystore().get());
 
@@ -88,7 +99,7 @@ public class DeployJar extends DefaultTask {
         Transaction transaction = TransactionBuilder.newBuilder()
                 .nid(BigInteger.valueOf(getNid().get()))
                 .from(owner.getAddress())
-                .to(ZERO_ADDRESS)
+                .to(toAddress)
                 .deploy(CONTENT_TYPE_JAVA, content)
                 .params(builder.build())
                 .build();

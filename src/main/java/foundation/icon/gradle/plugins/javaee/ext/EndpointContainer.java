@@ -16,6 +16,7 @@
 
 package foundation.icon.gradle.plugins.javaee.ext;
 
+import foundation.icon.gradle.plugins.javaee.task.DeployJar;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 
@@ -23,11 +24,13 @@ public class EndpointContainer {
     private final String name;
     private final Property<String> uri;
     private final Property<Integer> nid;
+    private final Property<String> to;
 
     public EndpointContainer(String name, ObjectFactory objectFactory) {
         this.name = name;
         this.uri = objectFactory.property(String.class);
         this.nid = objectFactory.property(Integer.class);
+        this.to = objectFactory.property(String.class).convention(DeployJar.SYSTEM_ADDRESS);
     }
 
     public String getName() {
@@ -48,5 +51,13 @@ public class EndpointContainer {
 
     public void setNid(int nid) {
         this.nid.set(nid);
+    }
+
+    public Property<String> getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to.set(to);
     }
 }
