@@ -42,6 +42,19 @@ optimizedJar {
 }
 ```
 
+#### Enabling Debug Mode
+
+`optimizedJar` task obfuscates the Java class names by default to reduce the output jar file size.
+However, this makes code analysis more difficult when debugging code by examining the stack trace.
+`enableDebug` option can be used to skip this optimization for debugging purpose.
+
+```groovy
+optimizedJar {
+    mainClassName = 'com.iconloop.score.example.HelloWorld'
+    enableDebug = true
+}
+```
+
 ### Jar Deployment
 
 The `deployJar` extension can be used to deploy the optimized jar to local or remote ICON networks that support the Java SCORE execution environment.
