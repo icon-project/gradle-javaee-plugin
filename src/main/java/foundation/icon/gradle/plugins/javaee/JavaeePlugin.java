@@ -24,6 +24,7 @@ import org.gradle.api.plugins.BasePlugin;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.compile.JavaCompile;
 
 public class JavaeePlugin implements Plugin<Project> {
     @Override
@@ -31,6 +32,15 @@ public class JavaeePlugin implements Plugin<Project> {
         if (!project.getPlugins().hasPlugin(JavaPlugin.class)) {
             project.getPlugins().apply(JavaPlugin.class);
         }
+
+        // adding "-parameters" option by default
+        project.getTasks().withType(JavaCompile.class).stream().forEach((task) -> {
+            var args = task.getOptions().getCompilerArgs();
+            if (!args.contains("-parameters")) {
+                args.add("-parameters");
+            }
+        });
+
         var convention = project.getConvention().getPlugin(JavaPluginConvention.class);
         var optJar = project.getTasks().create(OptimizedJar.getTaskName(), OptimizedJar.class);
         optJar.setGroup(BasePlugin.BUILD_GROUP);
