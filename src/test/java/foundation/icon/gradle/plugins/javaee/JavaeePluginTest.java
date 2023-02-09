@@ -18,6 +18,7 @@ package foundation.icon.gradle.plugins.javaee;
 
 import foundation.icon.gradle.plugins.javaee.task.OptimizedJar;
 import org.gradle.api.Project;
+import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.gradle.testkit.runner.GradleRunner;
@@ -30,6 +31,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JavaeePluginTest {
     @Test
@@ -40,6 +42,11 @@ public class JavaeePluginTest {
 
         // Verify the result
         assertNotNull(project.getTasks().findByName(OptimizedJar.getTaskName()));
+
+        // Check if "-parameters" option is added
+        project.getTasks().withType(JavaCompile.class).forEach(
+                (task) -> assertTrue(task.getOptions().getCompilerArgs().contains("-parameters"))
+        );
     }
 
     @Disabled

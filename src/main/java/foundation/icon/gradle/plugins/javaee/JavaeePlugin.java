@@ -34,7 +34,7 @@ public class JavaeePlugin implements Plugin<Project> {
         }
 
         // adding "-parameters" option by default
-        project.getTasks().withType(JavaCompile.class).stream().forEach((task) -> {
+        project.getTasks().withType(JavaCompile.class).forEach((task) -> {
             var args = task.getOptions().getCompilerArgs();
             if (!args.contains("-parameters")) {
                 args.add("-parameters");
