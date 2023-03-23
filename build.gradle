@@ -2,7 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'signing'
-    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+    id "io.github.gradle-nexus.publish-plugin" version "1.2.0"
 }
 
 repositories {
@@ -29,11 +29,11 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation 'foundation.icon:javaee-tooling:0.9.3'
+    implementation 'foundation.icon:javaee-tooling:0.9.4'
     implementation 'foundation.icon:icon-sdk:2.3.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 test {
