@@ -29,11 +29,11 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation 'foundation.icon:javaee-tooling:0.9.4'
-    implementation 'foundation.icon:icon-sdk:2.3.0'
+    implementation 'foundation.icon:javaee-tooling:0.9.5'
+    implementation 'foundation.icon:icon-sdk:2.4.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
 
 test {
